@@ -29,28 +29,19 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`enfunc hello [FILE]`](#enfunc-hello-file)
+* [`enfunc deploy`](#enfunc-deploy)
 * [`enfunc help [COMMAND]`](#enfunc-help-command)
 
-## `enfunc hello [FILE]`
+## `enfunc deploy`
 
-describe the command here
+Deploy code into the enfunc instance or cluster
 
 ```
 USAGE
-  $ enfunc hello [FILE]
-
-OPTIONS
-  -f, --force
-  -h, --help       show CLI help
-  -n, --name=name  name to print
-
-EXAMPLE
-  $ enfunc hello
-  hello world from ./src/hello.ts!
+  $ enfunc deploy
 ```
 
-_See code: [src\commands\hello.ts](https://github.com/enteam/enfunc-cli/blob/v0.0.0/src\commands\hello.ts)_
+_See code: [src\commands\deploy.ts](https://github.com/enteam/enfunc-cli/blob/v0.0.0/src\commands\deploy.ts)_
 
 ## `enfunc help [COMMAND]`
 
