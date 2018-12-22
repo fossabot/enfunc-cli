@@ -39,6 +39,9 @@ Deploy code into the enfunc instance or cluster
 ```
 USAGE
   $ enfunc deploy
+
+OPTIONS
+  -b, --bump
 ```
 
 _See code: [src\commands\deploy.ts](https://github.com/enteam/enfunc-cli/blob/v0.0.0/src\commands\deploy.ts)_

@@ -1,10 +1,10 @@
-import Command from "@oclif/command";
+import Command, { flags } from "@oclif/command";
 import * as archiver from "archiver";
 import axios from "axios";
 import * as FormData from "form-data";
 import { createReadStream, createWriteStream } from "fs";
 import { tmpdir } from "os";
-import { dirname, join, sep, basename } from "path";
+import { basename, dirname, join, sep } from "path";
 import { generate } from "shortid";
 
 import { IRevision } from "../interfaces/revision.interface";
@@ -13,8 +13,14 @@ export default class Deploy extends Command {
 
 	public static description = "Deploy code into the enfunc instance or cluster";
 
+	public static flags = {
+		bump: flags.boolean({ char: "b", default: true }),
+	};
+
 	public run() {
-		return new Promise(resolve => {
+		return new Promise((resolve) => {
+			// tslint:disable-next-line:no-shadowed-variable
+			const { flags } = this.parse(Deploy);
 			const filename = join(tmpdir(), generate() + ".zip");
 			const zipStream = createWriteStream(filename);
 			const archive = archiver("zip", {
@@ -35,7 +41,22 @@ export default class Deploy extends Command {
 						revision: uploadId,
 						url: `database://${uploadId}`,
 					};
-					axios.post(process.env.ENFUNC_HOST + "/functions/sync", rev).then((syncResponse) => resolve());
+					axios.post(process.env.ENFUNC_HOST + "/functions/sync", rev).then((syncResponse) => {
+						if (!flags.bump) { resolve(); } else {
+							axios.get(process.env.ENFUNC_HOST + "/functions").then((funcsResponse) => {
+								const bump = async () => {
+									for (const func of funcsResponse.data) {
+										if (func.appName === basename(dirname(process.cwd()))) {
+											func.id = func._id;
+											func.revision = uploadId;
+											await axios.put(process.env.ENFUNC_HOST + `/functions/${func.id}`, func);
+										}
+									}
+								};
+								bump().then(() => resolve());
+							});
+						}
+					});
 				});
 			});
 			archive.pipe(zipStream);
