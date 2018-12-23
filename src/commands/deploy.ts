@@ -14,6 +14,7 @@ export default class Deploy extends Command {
 	public static description = "Deploy code into the enfunc instance or cluster";
 
 	public static flags = {
+		app: flags.string({ char: "a" }),
 		bump: flags.boolean({ char: "b", default: true }),
 	};
 
@@ -36,7 +37,7 @@ export default class Deploy extends Command {
 				}).post(process.env.ENFUNC_HOST + "/functions/upload", form).then((uploadResponse) => {
 					const uploadId = uploadResponse.data.data.id;
 					const rev: IRevision = {
-						appName: basename(dirname(process.cwd())),
+						appName: flags.app,
 						name: `Deployment #${uploadId}`,
 						revision: uploadId,
 						url: `database://${uploadId}`,
@@ -46,7 +47,7 @@ export default class Deploy extends Command {
 							axios.get(process.env.ENFUNC_HOST + "/functions").then((funcsResponse) => {
 								const bump = async () => {
 									for (const func of funcsResponse.data) {
-										if (func.appName === basename(dirname(process.cwd()))) {
+										if (func.appName === flags.app) {
 											func.id = func._id;
 											func.revision = uploadId;
 											await axios.put(process.env.ENFUNC_HOST + `/functions/${func.id}`, func);
