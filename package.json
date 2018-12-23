@@ -1,7 +1,7 @@
 {
   "name": "enfunc-cli",
   "description": "High-availability distributed Function as a Service solution for building scalable apps and rest apis",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Matisiek PL @MatisiekPL",
   "bin": {
     "enfunc": "./bin/run"
