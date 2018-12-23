@@ -61,7 +61,7 @@ export default class Deploy extends Command {
 				});
 			});
 			archive.pipe(zipStream);
-			archive.directory(join(process.cwd(), "src"));
+			archive.directory(join(process.cwd(), "src"), "src");
 			archive.file(join(process.cwd(), "package.json"), {
 				name: "package.json",
 			});
