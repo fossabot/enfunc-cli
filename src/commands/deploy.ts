@@ -3,7 +3,7 @@ import * as archiver from "archiver";
 import axios from "axios";
 import * as FormData from "form-data";
 import { createReadStream, createWriteStream } from "fs";
-import { tmpdir } from "os";
+import { arch, tmpdir } from "os";
 import { basename, dirname, join, sep } from "path";
 import { generate } from "shortid";
 
@@ -61,7 +61,10 @@ export default class Deploy extends Command {
 				});
 			});
 			archive.pipe(zipStream);
-			archive.directory(join(process.cwd()), false);
+			archive.directory(join(process.cwd(), "src"), false);
+			archive.file(join(process.cwd(), "package.json"), {
+				name: "package.json",
+			});
 			archive.finalize();
 		});
 	}
