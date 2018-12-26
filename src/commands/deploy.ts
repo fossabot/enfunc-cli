@@ -9,6 +9,8 @@ import { generate } from "shortid";
 
 import { IRevision } from "../interfaces/revision.interface";
 
+const timeout = (ms: number) => new Promise((resolve) => setTimeout(() => resolve(), ms));
+
 export default class Deploy extends Command {
 
 	public static description = "Deploy code into the enfunc instance or cluster";
@@ -63,6 +65,14 @@ export default class Deploy extends Command {
 										if (func.appName === flags.app) {
 											func.id = func._id;
 											func.revision = uploadId;
+											// tslint:disable-next-line:max-line-length
+											while (await axios.get(process.env.ENFUNC_HOST + `/functions/ready/${flags.app}/${func.id}/${func.revision}`, {
+												headers: {
+													"X-enfunc-service-key": flags.key,
+												},
+											})) {
+												await timeout(500);
+											}
 											await axios.put(process.env.ENFUNC_HOST + `/functions/${func.id}`, func, {
 												headers: {
 													"X-enfunc-service-key": flags.key,
