@@ -14,8 +14,9 @@ export default class Deploy extends Command {
 	public static description = "Deploy code into the enfunc instance or cluster";
 
 	public static flags = {
-		app: flags.string({ char: "a" }),
+		app: flags.string({ char: "a", default: "hello-world" }),
 		bump: flags.boolean({ char: "b", default: true }),
+		key: flags.string({ char: "k", default: "1234" }),
 	};
 
 	public run() {
@@ -33,7 +34,11 @@ export default class Deploy extends Command {
 					filename: "file",
 				});
 				axios.create({
-					headers: form.getHeaders(),
+					headers: {
+						...form.getHeaders(), ...{
+							"X-enfunc-service-key": flags.key,
+						},
+					},
 				}).post(process.env.ENFUNC_HOST + "/functions/upload", form).then((uploadResponse) => {
 					const uploadId = uploadResponse.data.data.id;
 					const rev: IRevision = {
@@ -42,15 +47,27 @@ export default class Deploy extends Command {
 						revision: uploadId,
 						url: `database://${uploadId}`,
 					};
-					axios.post(process.env.ENFUNC_HOST + "/functions/sync", rev).then((syncResponse) => {
+					axios.post(process.env.ENFUNC_HOST + "/functions/sync", rev, {
+						headers: {
+							"X-enfunc-service-key": flags.key,
+						},
+					}).then((syncResponse) => {
 						if (!flags.bump) { resolve(); } else {
-							axios.get(process.env.ENFUNC_HOST + "/functions").then((funcsResponse) => {
+							axios.get(process.env.ENFUNC_HOST + "/functions", {
+								headers: {
+									"X-enfunc-service-key": flags.key,
+								},
+							}).then((funcsResponse) => {
 								const bump = async () => {
 									for (const func of funcsResponse.data) {
 										if (func.appName === flags.app) {
 											func.id = func._id;
 											func.revision = uploadId;
-											await axios.put(process.env.ENFUNC_HOST + `/functions/${func.id}`, func);
+											await axios.put(process.env.ENFUNC_HOST + `/functions/${func.id}`, func, {
+												headers: {
+													"X-enfunc-service-key": flags.key,
+												},
+											});
 										}
 									}
 								};
