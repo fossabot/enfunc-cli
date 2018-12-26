@@ -66,11 +66,11 @@ export default class Deploy extends Command {
 											func.id = func._id;
 											func.revision = uploadId;
 											// tslint:disable-next-line:max-line-length
-											while (await axios.get(process.env.ENFUNC_HOST + `/functions/ready/${flags.app}/${func.id}/${func.revision}`, {
+											while ((await axios.get(process.env.ENFUNC_HOST + `/functions/ready/${flags.app}/${func.id}/${func.revision}`, {
 												headers: {
 													"X-enfunc-service-key": flags.key,
 												},
-											})) {
+											})).data.notReady > 0) {
 												await timeout(500);
 											}
 											await axios.put(process.env.ENFUNC_HOST + `/functions/${func.id}`, func, {
