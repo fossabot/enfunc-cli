@@ -20,7 +20,7 @@ $ npm install -g enfunc-cli
 $ enfunc COMMAND
 running command...
 $ enfunc (-v|--version|version)
-enfunc-cli/0.0.4 win32-x64 node-v11.1.0
+enfunc-cli/0.0.5 win32-x64 node-v11.1.0
 $ enfunc --help [COMMAND]
 USAGE
   $ enfunc COMMAND
@@ -41,11 +41,12 @@ USAGE
   $ enfunc deploy
 
 OPTIONS
-  -a, --app=app
+  -a, --app=app  [default: hello-world]
   -b, --bump
+  -k, --key=key  [default: 1234]
 ```
 
-_See code: [src\commands\deploy.ts](https://github.com/enteam/enfunc-cli/blob/v0.0.4/src\commands\deploy.ts)_
+_See code: [src\commands\deploy.ts](https://github.com/enteam/enfunc-cli/blob/v0.0.5/src\commands\deploy.ts)_
 
 ## `enfunc help [COMMAND]`
 
