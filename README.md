@@ -8,6 +8,7 @@ High-availability distributed Function as a Service solution for building scalab
 [![Codecov](https://codecov.io/gh/enteam/enfunc-cli/branch/master/graph/badge.svg)](https://codecov.io/gh/enteam/enfunc-cli)
 [![Downloads/week](https://img.shields.io/npm/dw/enfunc-cli.svg)](https://npmjs.org/package/enfunc-cli)
 [![License](https://img.shields.io/npm/l/enfunc-cli.svg)](https://github.com/enteam/enfunc-cli/blob/master/package.json)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fenteam%2Fenfunc-cli.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fenteam%2Fenfunc-cli?ref=badge_shield)
 
 <!-- toc -->
 * [Usage](#usage)
@@ -65,3 +66,7 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.1.4/src\commands\help.ts)_
 <!-- commandsstop -->
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fenteam%2Fenfunc-cli.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fenteam%2Fenfunc-cli?ref=badge_large)
